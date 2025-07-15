@@ -1,25 +1,26 @@
 package gift.domain;
 
 import gift.enums.Role;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
-public class Member {
-    private Long id;
-    private String email;
-    private String password;
-    private Role role;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+@Entity
+@Table(name = "member")
+public class Member extends BaseEntity {
 
-    public Member(Long id, String email, String password, Role role, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this.id = id;
-        this.email = email;
-        this.password = password;
-        this.role = role;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-    }
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false, unique = true)
+    private String email;
+
+    @Column(nullable = false)
+    private String password;
+
+    @Column(nullable = false)
+    private Role role;
 
     public Member(Long id, String email, String password, Role role) {
         this.id = id;
@@ -29,6 +30,18 @@ public class Member {
     }
 
     public Member(String email, String password, Role role) {
+        this.email = email;
+        this.password = password;
+        this.role = role;
+    }
+
+    public Member() {
+
+    }
+
+    public Member(Long id, String email, String password, Role role, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        super(createdAt, updatedAt);
+        this.id = id;
         this.email = email;
         this.password = password;
         this.role = role;

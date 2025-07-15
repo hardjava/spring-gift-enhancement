@@ -1,4 +1,4 @@
-package gift.entity;
+package gift.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
@@ -18,4 +18,12 @@ public class BaseEntity {
 
     @LastModifiedDate
     private LocalDateTime modifiedAt;
+
+    public BaseEntity(LocalDateTime createdAt, LocalDateTime modifiedAt) {
+        this.createdAt = createdAt;
+        this.modifiedAt = modifiedAt;
+    }
+
+    public BaseEntity() {
+    }
 }

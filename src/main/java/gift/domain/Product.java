@@ -2,12 +2,27 @@ package gift.domain;
 
 import gift.validation.ProductNameValidator;
 import gift.validation.ProductPriceValidator;
+import jakarta.persistence.*;
 
-public class Product {
+@Entity
+@Table(name = "product")
+public class Product extends BaseEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
     private String name;
+
+    @Column(nullable = false)
     private Long price;
+
+    @Column(nullable = false)
     private String imageUrl;
+
+    public Product() {
+
+    }
 
     public Long getId() {
         return id;

@@ -28,17 +28,17 @@ public class WishListService {
                 .toList();
     }
 
-    @Transactional
-    public void saveWish(Long memberId, Long productId) {
-        Product findProduct = productRepository.findProductByIdOrElseThrow(productId);
+//    @Transactional
+//    public void saveWish(Long memberId, Long productId) {
+//        Product findProduct = productRepository.findProductByIdOrElseThrow(productId);
+//
+//        wishListRepository.saveWish(new Wish(memberId, findProduct.getId()));
+//    }
 
-        wishListRepository.saveWish(new Wish(memberId, findProduct.getId()));
-    }
-
-    @Transactional
-    public void deleteWish(Long memberId, Long productId) {
-        Product findProduct = productRepository.findProductByIdOrElseThrow(productId);
-
-        wishListRepository.deleteWish(new Wish(memberId, findProduct.getId()));
-    }
+//    @Transactional
+//    public void deleteWish(Long memberId, Long productId) {
+//        Product findProduct = productRepository.findProductByIdOrElseThrow(productId);
+//
+//        wishListRepository.deleteWish(new Wish(memberId, findProduct.getId()));
+//    }
 }

@@ -30,18 +30,18 @@ public class WishListController {
     }
 
     // 위시 리스트 상품 등록
-    @PostMapping
-    public ResponseEntity<Void> saveWish(@Valid @RequestBody WishRequestDto requestDto, @LoginMember Member member) {
-        wishListService.saveWish(member.getId(), requestDto.productId());
-
-        return new ResponseEntity<>(HttpStatus.CREATED);
-    }
+//    @PostMapping
+//    public ResponseEntity<Void> saveWish(@Valid @RequestBody WishRequestDto requestDto, @LoginMember Member member) {
+//        wishListService.saveWish(member.getId(), requestDto.productId());
+//
+//        return new ResponseEntity<>(HttpStatus.CREATED);
+//    }
 
     // 위시 리스트 상품 삭제
-    @DeleteMapping("/{productId}")
-    public ResponseEntity<Void> deleteWish(@PathVariable Long productId, @LoginMember Member member) {
-        wishListService.deleteWish(member.getId(), productId);
-
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
+//    @DeleteMapping("/{productId}")
+//    public ResponseEntity<Void> deleteWish(@PathVariable Long productId, @LoginMember Member member) {
+//        wishListService.deleteWish(member.getId(), productId);
+//
+//        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+//    }
 }
