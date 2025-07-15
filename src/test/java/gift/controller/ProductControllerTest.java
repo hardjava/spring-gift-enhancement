@@ -1,4 +1,4 @@
-package gift;
+package gift.controller;
 
 import gift.component.JwtUtil;
 import gift.dto.CreateProductRequestDto;

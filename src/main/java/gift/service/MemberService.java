@@ -32,11 +32,11 @@ public class MemberService {
 
     @Transactional
     public void registerMember(RegisterMemberRequestDto requestDto) {
-        if (memberRepository.existsByEmail(requestDto.email())) {
+        if (memberRepository.existsMemberByEmail(requestDto.email())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "이미 존재하는 이메일 입니다.");
         }
 
-        memberRepository.registerMember(
+        memberRepository.save(
                 new Member(
                         requestDto.email(),
                         bCryptEncryptor.encode(requestDto.password()),
