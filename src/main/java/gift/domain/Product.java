@@ -48,16 +48,23 @@ public class Product extends BaseEntity {
         this.imageUrl = imageUrl;
     }
 
-    private Product(Long id, String name, Long price, String imageUrl) {
-        this.id = id;
+    public Product(String name, Long price, String imageUrl) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
     }
 
-    public static Product of(Long id, String name, Long price, String imageUrl) {
+    public static Product of(String name, Long price, String imageUrl) {
         ProductNameValidator.validateName(name);
         ProductPriceValidator.validatePrice(price);
-        return new Product(id, name, price, imageUrl);
+        return new Product(name, price, imageUrl);
+    }
+
+    public void update(String name, Long price, String imageUrl) {
+        ProductNameValidator.validateName(name);
+        ProductPriceValidator.validatePrice(price);
+        this.name = name;
+        this.price = price;
+        this.imageUrl = imageUrl;
     }
 }
