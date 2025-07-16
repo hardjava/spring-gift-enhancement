@@ -9,5 +9,5 @@
 - [x] Product 엔티티 클래스 작성
 - [x] Wish 엔티티 클래스 작성
   - [x] 엔티티 간 연관관계 매핑
-- [ ] Spring Data JPA 기반 Repository 작성
-- [ ] @DataJpaTest를 활용한 레포지토리 테스트 코드 작성
+- [x] Spring Data JPA 기반 Repository 작성
+- [x] @DataJpaTest를 활용한 레포지토리 테스트 코드 작성

@@ -17,11 +17,25 @@ public class Wish extends BaseEntity {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
+    public Long getId() {
+        return id;
+    }
+
     public Long getMemberId() {
         return member.getId();
     }
 
     public Long getProductId() {
         return product.getId();
+    }
+
+    public Wish() {
+
+    }
+
+    public Wish(Member member, Product product) {
+        super();
+        this.member = member;
+        this.product = product;
     }
 }
