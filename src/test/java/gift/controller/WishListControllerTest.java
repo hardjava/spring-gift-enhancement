@@ -38,7 +38,7 @@ public class WishListControllerTest {
     private final Member mockMember = new Member(1L, "test@email.com", "encoded_pw", Role.ROLE_USER);
 
     @BeforeEach
-    void setUp() throws Exception {
+    void setUp() {
         // 인증 리졸버가 member 반환하도록 설정
         given(loginMemberArgumentResolver.supportsParameter(any())).willReturn(true);
         given(loginMemberArgumentResolver.resolveArgument(any(), any(), any(), any()))
