@@ -3,6 +3,7 @@ package gift.controller;
 import gift.component.JwtUtil;
 import gift.dto.CreateProductRequestDto;
 import gift.dto.ProductResponseDto;
+import gift.dto.ProductWithPageResponseDto;
 import gift.dto.UpdateProductRequestDto;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
@@ -27,11 +28,14 @@ public class AdminController {
     // 상품 목록 조회
     @GetMapping
     public String list(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int limit,
+            @RequestParam(required = false) String search,
             @RequestHeader(value = "Authorization", required = false) String authHeader,
             Model model) {
         jwtUtil.validateAuthorizationAdminHeader(authHeader, "admin-api");
-        List<ProductResponseDto> products = productService.findAllProducts();
-        model.addAttribute("products", products);
+        ProductWithPageResponseDto responseDto = productService.findAllProducts(page, limit, search);
+        model.addAttribute("products", responseDto);
 
         return "admin/product/list";
     }

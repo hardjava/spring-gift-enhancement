@@ -37,6 +37,16 @@ public class MockDataInitializer implements CommandLineRunner {
         Product p4 = productRepository.save(new Product("수박바", 1600L, "test4"));
         Product p5 = productRepository.save(new Product("바밤바", 1100L, "test5"));
 
+        for (int i = 0; i < 10; i++) {
+            productRepository.save(
+                    new Product(
+                            "테스트 데이터 " + i,
+                            1200L,
+                            "테스트 url " + i
+                    )
+            );
+        }
+
 
         wishListRepository.save(new Wish(m1, p2));
         wishListRepository.save(new Wish(m1, p2));

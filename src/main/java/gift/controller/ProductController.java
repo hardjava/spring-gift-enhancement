@@ -3,6 +3,7 @@ package gift.controller;
 import gift.component.JwtUtil;
 import gift.dto.CreateProductRequestDto;
 import gift.dto.ProductResponseDto;
+import gift.dto.ProductWithPageResponseDto;
 import gift.dto.UpdateProductRequestDto;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
@@ -25,10 +26,14 @@ public class ProductController {
 
     // 상품 목록 조회
     @GetMapping
-    public ResponseEntity<List<ProductResponseDto>> findAllProducts() {
-        List<ProductResponseDto> list = productService.findAllProducts();
+    public ResponseEntity<ProductWithPageResponseDto> findAllProducts(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int limit,
+            @RequestParam(required = false) String search
+    ) {
+        ProductWithPageResponseDto responseDto = productService.findAllProducts(page, limit, search);
 
-        return new ResponseEntity<>(list, HttpStatus.OK);
+        return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
     // 상품 단건 조회
