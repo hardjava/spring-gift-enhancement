@@ -20,7 +20,7 @@ public class ProductService {
 
     public List<ProductResponseDto> findAllProducts() {
 
-        return productRepository.findAllProducts()
+        return productRepository.findAll()
                 .stream()
                 .map(ProductResponseDto::from)
                 .toList();
@@ -34,11 +34,8 @@ public class ProductService {
 
     @Transactional
     public ProductResponseDto createProduct(CreateProductRequestDto requestDto) {
-        Product createdProduct = productRepository.createProduct(
-                requestDto.name(),
-                requestDto.price(),
-                requestDto.imageUrl()
-        );
+        Product product = Product.of(requestDto.name(), requestDto.price(), requestDto.imageUrl());
+        Product createdProduct = productRepository.save(product);
 
         return ProductResponseDto.from(createdProduct);
     }
@@ -46,18 +43,12 @@ public class ProductService {
     @Transactional
     public void deleteProduct(Long id) {
         Product findProduct = productRepository.findProductByIdOrElseThrow(id);
-        productRepository.deleteProduct(id);
+        productRepository.deleteById(id);
     }
 
     @Transactional
     public void updateProduct(UpdateProductRequestDto requestDto) {
         Product findProduct = productRepository.findProductByIdOrElseThrow(requestDto.id());
-        Product updatedProduct = Product.of(
-                requestDto.id(),
-                requestDto.name(),
-                requestDto.price(),
-                requestDto.imageUrl()
-        );
-        productRepository.updateProduct(updatedProduct);
+        findProduct.update(requestDto.name(), requestDto.price(), requestDto.imageUrl());
     }
 }

@@ -1,7 +1,6 @@
-package gift;
+package gift.controller;
 
 import gift.auth.LoginMemberArgumentResolver;
-import gift.controller.WishListController;
 import gift.domain.Member;
 import gift.enums.Role;
 import gift.exception.UnauthorizedException;
@@ -10,17 +9,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -45,7 +38,7 @@ public class WishListControllerTest {
     private final Member mockMember = new Member(1L, "test@email.com", "encoded_pw", Role.ROLE_USER);
 
     @BeforeEach
-    void setUp() throws Exception {
+    void setUp() {
         // 인증 리졸버가 member 반환하도록 설정
         given(loginMemberArgumentResolver.supportsParameter(any())).willReturn(true);
         given(loginMemberArgumentResolver.resolveArgument(any(), any(), any(), any()))

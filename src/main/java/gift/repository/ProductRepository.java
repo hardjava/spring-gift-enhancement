@@ -1,17 +1,16 @@
 package gift.repository;
 
 import gift.domain.Product;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
+import java.util.Optional;
 
-public interface ProductRepository {
-    List<Product> findAllProducts();
+public interface ProductRepository extends JpaRepository<Product, Long> {
+    default Product findProductByIdOrElseThrow(Long id) {
+        return findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 ID의 상품을 찾을 수 없습니다."));
+    }
 
-    Product findProductByIdOrElseThrow(Long id);
-
-    Product createProduct(String name, Long price, String imageUrl);
-
-    void deleteProduct(Long id);
-
-    void updateProduct(Product product);
+    Optional<Product> findByName(String name);
 }

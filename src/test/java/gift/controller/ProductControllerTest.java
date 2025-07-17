@@ -1,4 +1,4 @@
-package gift;
+package gift.controller;
 
 import gift.component.JwtUtil;
 import gift.dto.CreateProductRequestDto;
@@ -175,21 +175,21 @@ public class ProductControllerTest {
     // 단위 테스트
     @Test
     void 카카오가_포함된_이름은_예외를_던진다() {
-        assertThatThrownBy(() -> Product.of(null, "[카카오] 메로나", 1200L, "img.jpg"))
+        assertThatThrownBy(() -> Product.of("[카카오] 메로나", 1200L, "img.jpg"))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("카카오");
     }
 
     @Test
     void 허용되지_않은_문자가_포함된_이름은_예외를_던진다() {
-        assertThatThrownBy(() -> Product.of(null, "메로나!", 1000L, "img.jpg"))
+        assertThatThrownBy(() -> Product.of("메로나!", 1000L, "img.jpg"))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("특수 문자");
     }
 
     @Test
     void 상품_가격이_음수인_경우_예외를_던진다() {
-        assertThatThrownBy(() -> Product.of(null, "메로나", -12L, "img.jpg"))
+        assertThatThrownBy(() -> Product.of("메로나", -12L, "img.jpg"))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("가격");
     }

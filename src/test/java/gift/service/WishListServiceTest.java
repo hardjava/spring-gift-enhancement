@@ -1,8 +1,9 @@
-package gift;
+package gift.service;
 
+import gift.domain.Member;
+import gift.enums.Role;
 import gift.repository.ProductRepository;
 import gift.repository.WishListRepository;
-import gift.service.WishListService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -28,14 +29,14 @@ public class WishListServiceTest {
     @Test
     void 존재하지_않는_상품_ID로_등록_시_404반환() {
         // given
-        Long memberId = 1L;
+        Member member = new Member(1L, "test@email.com", "test1234", Role.ROLE_USER);
         Long productId = 9999L;
 
         given(productRepository.findProductByIdOrElseThrow(productId))
                 .willThrow(new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 ID의 상품을 찾을 수 없습니다."));
 
         // when & then
-        assertThatThrownBy(() -> wishListService.saveWish(memberId, productId))
+        assertThatThrownBy(() -> wishListService.saveWish(member, productId))
                 .isInstanceOf(ResponseStatusException.class)
                 .hasMessageContaining(HttpStatus.NOT_FOUND.name());
     }
@@ -44,9 +45,6 @@ public class WishListServiceTest {
     void 존재하지_않는_상품_ID_삭제_시_404반환() {
         Long memberId = 1L;
         Long productId = 9999L;
-
-        given(productRepository.findProductByIdOrElseThrow(productId))
-                .willThrow(new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 ID의 상품을 찾을 수 없습니다."));
 
         assertThatThrownBy(() -> wishListService.deleteWish(memberId, productId))
                 .isInstanceOf(ResponseStatusException.class)

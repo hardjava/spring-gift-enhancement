@@ -1,12 +1,15 @@
 package gift.service;
 
+import gift.domain.Member;
 import gift.domain.Product;
 import gift.domain.Wish;
 import gift.dto.WishSummaryResponseDto;
 import gift.repository.ProductRepository;
 import gift.repository.WishListRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -29,16 +32,19 @@ public class WishListService {
     }
 
     @Transactional
-    public void saveWish(Long memberId, Long productId) {
+    public void saveWish(Member member, Long productId) {
         Product findProduct = productRepository.findProductByIdOrElseThrow(productId);
+        Wish wish = new Wish(member, findProduct);
 
-        wishListRepository.saveWish(new Wish(memberId, findProduct.getId()));
+        wishListRepository.save(wish);
     }
 
     @Transactional
     public void deleteWish(Long memberId, Long productId) {
-        Product findProduct = productRepository.findProductByIdOrElseThrow(productId);
+        if (!wishListRepository.existsWishByMember_IdAndProduct_Id(memberId, productId)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 상품을 찾을 수 없습니다.");
+        }
 
-        wishListRepository.deleteWish(new Wish(memberId, findProduct.getId()));
+        wishListRepository.deleteWishByMember_IdAndProduct_Id(memberId, productId);
     }
 }

@@ -2,14 +2,14 @@ package gift.domain;
 
 public class WishSummary {
     private String productName;
-    private int count;
+    private Long count;
 
-    public WishSummary(String productName, int count) {
+    public WishSummary(String productName, Long count) {
         this.productName = productName;
         this.count = count;
     }
 
-    public static WishSummary of(String productName, int count) {
+    public static WishSummary of(String productName, Long count) {
         return new WishSummary(productName, count);
     }
 
@@ -17,7 +17,7 @@ public class WishSummary {
         return productName;
     }
 
-    public int getCount() {
+    public Long getCount() {
         return count;
     }
 }

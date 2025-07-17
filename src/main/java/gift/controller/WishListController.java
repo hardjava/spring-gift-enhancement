@@ -32,7 +32,7 @@ public class WishListController {
     // 위시 리스트 상품 등록
     @PostMapping
     public ResponseEntity<Void> saveWish(@Valid @RequestBody WishRequestDto requestDto, @LoginMember Member member) {
-        wishListService.saveWish(member.getId(), requestDto.productId());
+        wishListService.saveWish(member, requestDto.productId());
 
         return new ResponseEntity<>(HttpStatus.CREATED);
     }

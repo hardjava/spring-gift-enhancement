@@ -1,23 +1,41 @@
 package gift.domain;
 
-import java.time.LocalDateTime;
+import jakarta.persistence.*;
 
-public class Wish {
+@Entity
+@Table(name = "wish")
+public class Wish extends BaseEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long memberId;
-    private Long productId;
-    private LocalDateTime createdAt;
+
+    @ManyToOne
+    @JoinColumn(name = "member_id", nullable = false)
+    private Member member;
+
+    @ManyToOne
+    @JoinColumn(name = "product_id", nullable = false)
+    private Product product;
+
+    public Long getId() {
+        return id;
+    }
 
     public Long getMemberId() {
-        return memberId;
+        return member.getId();
     }
 
     public Long getProductId() {
-        return productId;
+        return product.getId();
     }
 
-    public Wish(Long memberId, Long productId) {
-        this.memberId = memberId;
-        this.productId = productId;
+    public Wish() {
+
+    }
+
+    public Wish(Member member, Product product) {
+        super();
+        this.member = member;
+        this.product = product;
     }
 }
