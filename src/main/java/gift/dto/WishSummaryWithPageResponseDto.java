@@ -2,8 +2,8 @@ package gift.dto;
 
 import java.util.List;
 
-public record ProductWithPageResponseDto(
-        List<ProductResponseDto> content,
+public record WishSummaryWithPageResponseDto(
+        List<WishSummaryResponseDto> content,
         PaginationMetadataDto paginationMetadata
 ) {
 }

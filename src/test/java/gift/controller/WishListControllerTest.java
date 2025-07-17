@@ -12,16 +12,13 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
-import java.util.List;
-
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 @WebMvcTest(WishListController.class)
@@ -43,10 +40,6 @@ public class WishListControllerTest {
         given(loginMemberArgumentResolver.supportsParameter(any())).willReturn(true);
         given(loginMemberArgumentResolver.resolveArgument(any(), any(), any(), any()))
                 .willReturn(mockMember);
-
-        // 서비스 결과는 더미로 세팅
-        given(wishListService.findAllWishSummaryByMemberId(anyLong()))
-                .willReturn(List.of());
     }
 
     @Test

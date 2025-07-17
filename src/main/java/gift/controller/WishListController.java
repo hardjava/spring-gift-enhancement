@@ -4,6 +4,7 @@ import gift.auth.LoginMember;
 import gift.domain.Member;
 import gift.dto.WishRequestDto;
 import gift.dto.WishSummaryResponseDto;
+import gift.dto.WishSummaryWithPageResponseDto;
 import gift.service.WishListService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -23,10 +24,15 @@ public class WishListController {
 
     // 위시 리스트 상품 조회
     @GetMapping
-    public ResponseEntity<List<WishSummaryResponseDto>> findAllByMemberId(@LoginMember Member member) {
-        List<WishSummaryResponseDto> list = wishListService.findAllWishSummaryByMemberId(member.getId());
+    public ResponseEntity<WishSummaryWithPageResponseDto> findAllByMemberId(
+            @LoginMember Member member,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int limit,
+            @RequestParam(required = false) String search
+    ) {
+        WishSummaryWithPageResponseDto responseDto = wishListService.findAllWishSummaryByMemberId(member.getId(), page, limit, search);
 
-        return new ResponseEntity<>(list, HttpStatus.OK);
+        return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
     // 위시 리스트 상품 등록

@@ -14,9 +14,26 @@ public interface WishListRepository extends JpaRepository<Wish, Long> {
             from wish w
             join product p on w.product_id = p.id
             where w.member_id = :memberId
-            group by p.name, w.product_id;
+            group by p.name, w.product_id
+            order by count desc
+            limit :limit
+            offset :offset
+            
             """, nativeQuery = true)
-    List<WishSummary> findAllWishSummaryByMemberId(@Param("memberId") Long memberId);
+    List<WishSummary> findAllWishSummaryByMemberId(@Param("memberId") Long memberId, @Param("limit") int limit, @Param("offset") int offset);
+
+    @Query(value = """
+            select p.name as productName, count(*) as count
+            from wish w
+            join product p on w.product_id = p.id
+            where w.member_id = :memberId
+            and p.name like :search
+            group by p.name, w.product_id
+            order by count desc
+            limit :limit
+            offset :offset
+            """, nativeQuery = true)
+    List<WishSummary> findByKeyword(@Param("memberId") Long memberId, @Param("limit") int limit, @Param("offset") int offset, @Param("search") String search);
 
     boolean existsWishByMember_IdAndProduct_Id(Long memberId, Long productId);
 
