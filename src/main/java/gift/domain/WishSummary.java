@@ -9,10 +9,6 @@ public class WishSummary {
         this.count = count;
     }
 
-    public static WishSummary of(String productName, Long count) {
-        return new WishSummary(productName, count);
-    }
-
     public String getProductName() {
         return productName;
     }
