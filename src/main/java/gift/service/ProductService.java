@@ -29,11 +29,12 @@ public class ProductService {
 
         if (search == null || search.isBlank()) {
             list = productRepository.findAllByPaging(limit, offset);
+            totalCount = productRepository.countAll();
         } else {
             String keyword = "%" + search + "%";
             list = productRepository.findByKeyword(limit, offset, keyword);
+            totalCount = productRepository.countAllByKeyword(keyword);
         }
-        totalCount = list.size();
 
         List<ProductResponseDto> content = list.stream()
                 .map(ProductResponseDto::from)

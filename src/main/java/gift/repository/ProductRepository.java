@@ -37,4 +37,18 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             OFFSET :offset      
             """, nativeQuery = true)
     List<Product> findByKeyword(@Param("limit") int limit, @Param("offset") int offset, @Param("search") String search);
+
+    @Query(value = """
+            SELECT COUNT(*)
+            FROM product
+            """, nativeQuery = true)
+    long countAll();
+
+    @Query(value = """
+            SELECT COUNT(*)
+            FROM product
+            WHERE image_url LIKE :search
+            OR name LIKE :search
+            """, nativeQuery = true)
+    long countAllByKeyword(@Param("search") String search);
 }

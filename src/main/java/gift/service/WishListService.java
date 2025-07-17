@@ -37,11 +37,12 @@ public class WishListService {
 
         if (search == null || search.isBlank()) {
             list = wishListRepository.findAllWishSummaryByMemberId(memberId, limit, offset);
+            totalCount = wishListRepository.countAll(memberId);
         } else {
             String keyword = "%" + search + "%";
             list = wishListRepository.findByKeyword(memberId, limit, offset, keyword);
+            totalCount = wishListRepository.countAllByKeyword(memberId, keyword);
         }
-        totalCount = list.size();
 
         List<WishSummaryResponseDto> content = list.stream()
                 .map(WishSummaryResponseDto::from)

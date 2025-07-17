@@ -40,16 +40,19 @@ public class PagingTest {
     void 검색어_없이_상품_페이징_정상조회() {
         // given
         int page = 1;
-        int limit = 5;
-        int offset = (page - 1) * limit;
+        int limit = 10;
+        Long count = 2L;
 
         List<Product> mockProducts = List.of(
                 new Product("상품1", 1000L, "img1"),
                 new Product("상품2", 2000L, "img2")
         );
 
-        Mockito.when(productRepository.findAllByPaging(limit, offset))
+        Mockito.when(productRepository.findAllByPaging(limit, 0))
                 .thenReturn(mockProducts);
+
+        Mockito.when(productRepository.countAll())
+                .thenReturn(count);
 
         // when
         ProductWithPageResponseDto dto = productService.findAllProducts(page, limit, null);
@@ -66,7 +69,8 @@ public class PagingTest {
     void 검색어_있을때_상품_페이징_정상조회() {
         // given
         int page = 1;
-        int limit = 5;
+        int limit = 10;
+        Long count = 2L;
         String search = "상품";
 
         List<Product> mockProducts = List.of(
@@ -76,6 +80,9 @@ public class PagingTest {
 
         Mockito.when(productRepository.findByKeyword(limit, 0, "%" + search + "%"))
                 .thenReturn(mockProducts);
+
+        Mockito.when(productRepository.countAllByKeyword("%" + search + "%"))
+                .thenReturn(count);
 
         // when
         ProductWithPageResponseDto result = productService.findAllProducts(page, limit, search);
@@ -103,15 +110,18 @@ public class PagingTest {
         Long memberId = 1L;
         int page = 1;
         int limit = 5;
-        int offset = (page - 1) * limit;
+        Long count = 2L;
 
         List<WishSummary> mockSummaries = List.of(
                 new WishSummary("초콜릿", 3L),
                 new WishSummary("꽃다발", 2L)
         );
 
-        Mockito.when(wishListRepository.findAllWishSummaryByMemberId(memberId, limit, offset))
+        Mockito.when(wishListRepository.findAllWishSummaryByMemberId(memberId, limit, 0))
                 .thenReturn(mockSummaries);
+
+        Mockito.when(wishListRepository.countAll(memberId))
+                .thenReturn(count);
 
         // when
         WishSummaryWithPageResponseDto result = wishListService.findAllWishSummaryByMemberId(memberId, page, limit, null);
