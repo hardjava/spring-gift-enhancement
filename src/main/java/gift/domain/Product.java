@@ -18,7 +18,7 @@ public class Product extends BaseEntity {
     @Column(nullable = false)
     private String imageUrl;
 
-    public Product() {
+    protected Product() {
 
     }
 
@@ -36,10 +36,6 @@ public class Product extends BaseEntity {
 
     public String getImageUrl() {
         return imageUrl;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public Product(String name, Long price, String imageUrl) {
