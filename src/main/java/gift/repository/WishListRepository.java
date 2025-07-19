@@ -16,19 +16,19 @@ public interface WishListRepository extends JpaRepository<Wish, Long> {
 
     @Query(
             value = """ 
-                    SELECT new gift.domain.WishSummary(w.product.name, COUNT(w))
+                    SELECT new gift.domain.WishSummary(w.product.name.name, COUNT(w))
                     FROM Wish w
                     JOIN w.product p
                     WHERE w.member.id = :memberId
-                    AND (:search IS NULL OR p.name LIKE CONCAT('%', :search, '%'))
-                    GROUP BY p.name
+                    AND (:search IS NULL OR p.name.name LIKE CONCAT('%', :search, '%'))
+                    GROUP BY p.name.name
                     """,
             countQuery = """
                     SELECT COUNT(DISTINCT p.name)
                     FROM Wish w
                     JOIN w.product p
                     WHERE w.member.id = :memberId
-                    AND (:search IS NULL OR p.name LIKE CONCAT('%', :search, '%'))
+                    AND (:search IS NULL OR p.name.name LIKE CONCAT('%', :search, '%'))
                     """
     )
     Page<WishSummary> findWishSummaryByMemberId(@Param("memberId") Long memberId, @Param("search") String search, Pageable pageable);

@@ -20,7 +20,7 @@ public class WishListService {
         this.productRepository = productRepository;
     }
 
-    public WishSummaryWithPageResponseDto findAllWishSummaryByMemberId(MemberPaginationInfo paginationInfo) {
+    public WishSummaryWithPageResponseDto findAllWishSummaryByMemberId(WishListPaginationInfo paginationInfo) {
         Page<WishSummary> findWishSummary = wishListRepository.findWishSummaryByMemberId(
                 paginationInfo.getMemberId(),
                 paginationInfo.getSearch(),

@@ -2,8 +2,7 @@ package gift.controller;
 
 import gift.auth.LoginMember;
 import gift.domain.Member;
-import gift.domain.MemberPaginationInfo;
-import gift.domain.PaginationInfo;
+import gift.domain.WishListPaginationInfo;
 import gift.dto.WishRequestDto;
 import gift.dto.WishSummaryWithPageResponseDto;
 import gift.service.WishListService;
@@ -34,7 +33,7 @@ public class WishListController {
             @RequestParam(required = false, defaultValue = "product.name") String sortBy
     ) {
         Pageable pageRequest = PageRequest.of(page - 1, limit, Sort.by(sortBy).descending());
-        MemberPaginationInfo paginationInfo = new MemberPaginationInfo(pageRequest, search, member);
+        WishListPaginationInfo paginationInfo = new WishListPaginationInfo(pageRequest, search, member);
         WishSummaryWithPageResponseDto responseDto = wishListService.findAllWishSummaryByMemberId(paginationInfo);
 
         return new ResponseEntity<>(responseDto, HttpStatus.OK);

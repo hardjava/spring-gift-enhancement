@@ -2,10 +2,10 @@ package gift.domain;
 
 import org.springframework.data.domain.Pageable;
 
-public class MemberPaginationInfo extends PaginationInfo {
+public class WishListPaginationInfo extends PaginationInfo {
     private Member member;
 
-    public MemberPaginationInfo(Pageable pageable, String search, Member member) {
+    public WishListPaginationInfo(Pageable pageable, String search, Member member) {
         super(pageable, search);
         this.member = member;
     }

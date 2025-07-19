@@ -21,7 +21,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             value = """
                     SELECT p
                     FROM Product p
-                    WHERE (:search IS NULL OR p.name LIKE CONCAT('%', :search, '%'))
+                    WHERE (:search IS NULL OR p.name.name LIKE CONCAT('%', :search, '%'))
                     """
     )
     Page<Product> findProductByNameLike(Pageable pageRequest, String search);
