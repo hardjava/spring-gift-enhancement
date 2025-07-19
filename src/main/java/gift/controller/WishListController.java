@@ -30,7 +30,7 @@ public class WishListController {
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int limit,
             @RequestParam(required = false) String search,
-            @RequestParam(required = false, defaultValue = "product.name") String sortBy
+            @RequestParam(required = false, defaultValue = "p.name") String sortBy
     ) {
         Pageable pageRequest = PageRequest.of(page - 1, limit, Sort.by(sortBy).descending());
         WishListPaginationInfo paginationInfo = new WishListPaginationInfo(pageRequest, search, member);

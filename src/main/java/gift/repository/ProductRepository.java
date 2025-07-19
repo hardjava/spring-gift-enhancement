@@ -1,6 +1,7 @@
 package gift.repository;
 
 import gift.domain.Product;
+import gift.domain.ProductName;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,7 +16,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
         return findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 ID의 상품을 찾을 수 없습니다."));
     }
 
-    Optional<Product> findByName(String name);
+    Optional<Product> findByName(ProductName name);
 
     @Query(
             value = """

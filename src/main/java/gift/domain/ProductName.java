@@ -5,7 +5,7 @@ import jakarta.persistence.Embeddable;
 
 @Embeddable
 public class ProductName {
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
 
     protected ProductName() {

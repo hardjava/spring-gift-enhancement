@@ -10,11 +10,9 @@ public class Product extends BaseEntity {
     private Long id;
 
     @Embedded
-    @Column(nullable = false)
     private ProductName name;
 
     @Embedded
-    @Column(nullable = false)
     private ProductPrice price;
 
     @Column(nullable = false)

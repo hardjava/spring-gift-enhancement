@@ -16,7 +16,7 @@ public interface WishListRepository extends JpaRepository<Wish, Long> {
 
     @Query(
             value = """ 
-                    SELECT new gift.domain.WishSummary(w.product.name.name, COUNT(w))
+                    SELECT new gift.domain.WishSummary(p.name.name, COUNT(w))
                     FROM Wish w
                     JOIN w.product p
                     WHERE w.member.id = :memberId
@@ -24,7 +24,7 @@ public interface WishListRepository extends JpaRepository<Wish, Long> {
                     GROUP BY p.name.name
                     """,
             countQuery = """
-                    SELECT COUNT(DISTINCT p.name)
+                    SELECT COUNT(DISTINCT p.name.name)
                     FROM Wish w
                     JOIN w.product p
                     WHERE w.member.id = :memberId
