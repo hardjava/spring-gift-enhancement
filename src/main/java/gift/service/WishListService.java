@@ -1,20 +1,14 @@
 package gift.service;
 
-import gift.domain.Member;
-import gift.domain.Product;
-import gift.domain.Wish;
-import gift.domain.WishSummary;
-import gift.dto.PaginationMetadataDto;
-import gift.dto.WishSummaryResponseDto;
+import gift.domain.*;
 import gift.dto.WishSummaryWithPageResponseDto;
 import gift.repository.ProductRepository;
 import gift.repository.WishListRepository;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
-
-import java.util.List;
 
 @Service
 public class WishListService {
@@ -26,36 +20,14 @@ public class WishListService {
         this.productRepository = productRepository;
     }
 
-    public WishSummaryWithPageResponseDto findAllWishSummaryByMemberId(Long memberId, int page, int limit, String search) {
-        if (page < 0 || limit < 0) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "올바르지 않은 요청입니다.");
-        }
-
-        int offset = (page - 1) * limit;
-        List<WishSummary> list;
-        long totalCount;
-
-        if (search == null || search.isBlank()) {
-            list = wishListRepository.findAllWishSummaryByMemberId(memberId, limit, offset);
-            totalCount = wishListRepository.countAll(memberId);
-        } else {
-            String keyword = "%" + search + "%";
-            list = wishListRepository.findByKeyword(memberId, limit, offset, keyword);
-            totalCount = wishListRepository.countAllByKeyword(memberId, keyword);
-        }
-
-        List<WishSummaryResponseDto> content = list.stream()
-                .map(WishSummaryResponseDto::from)
-                .toList();
-
-        PaginationMetadataDto paginationMetadataDto = new PaginationMetadataDto(
-                page,
-                limit,
-                (int) Math.ceil((double) totalCount / limit),
-                totalCount
+    public WishSummaryWithPageResponseDto findAllWishSummaryByMemberId(MemberPaginationInfo paginationInfo) {
+        Page<WishSummary> findWishSummary = wishListRepository.findWishSummaryByMemberId(
+                paginationInfo.getMemberId(),
+                paginationInfo.getSearch(),
+                paginationInfo.getPageable()
         );
 
-        return new WishSummaryWithPageResponseDto(content, paginationMetadataDto);
+        return WishSummaryWithPageResponseDto.from(findWishSummary);
     }
 
     @Transactional

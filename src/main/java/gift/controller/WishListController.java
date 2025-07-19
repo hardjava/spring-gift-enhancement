@@ -2,16 +2,18 @@ package gift.controller;
 
 import gift.auth.LoginMember;
 import gift.domain.Member;
+import gift.domain.MemberPaginationInfo;
+import gift.domain.PaginationInfo;
 import gift.dto.WishRequestDto;
-import gift.dto.WishSummaryResponseDto;
 import gift.dto.WishSummaryWithPageResponseDto;
 import gift.service.WishListService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("api/wishes")
@@ -28,9 +30,12 @@ public class WishListController {
             @LoginMember Member member,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int limit,
-            @RequestParam(required = false) String search
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false, defaultValue = "product.name") String sortBy
     ) {
-        WishSummaryWithPageResponseDto responseDto = wishListService.findAllWishSummaryByMemberId(member.getId(), page, limit, search);
+        Pageable pageRequest = PageRequest.of(page - 1, limit, Sort.by(sortBy).descending());
+        MemberPaginationInfo paginationInfo = new MemberPaginationInfo(pageRequest, search, member);
+        WishSummaryWithPageResponseDto responseDto = wishListService.findAllWishSummaryByMemberId(paginationInfo);
 
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }

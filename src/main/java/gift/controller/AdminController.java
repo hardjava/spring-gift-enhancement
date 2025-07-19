@@ -1,12 +1,16 @@
 package gift.controller;
 
 import gift.component.JwtUtil;
+import gift.domain.PaginationInfo;
 import gift.dto.CreateProductRequestDto;
 import gift.dto.ProductResponseDto;
 import gift.dto.ProductWithPageResponseDto;
 import gift.dto.UpdateProductRequestDto;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -29,10 +33,13 @@ public class AdminController {
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int limit,
             @RequestParam(required = false) String search,
+            @RequestParam(required = false, defaultValue = "name") String sortBy,
             @RequestHeader(value = "Authorization", required = false) String authHeader,
             Model model) {
         jwtUtil.validateAuthorizationAdminHeader(authHeader, "admin-api");
-        ProductWithPageResponseDto responseDto = productService.findAllProducts(page, limit, search);
+        Pageable pageRequest = PageRequest.of(page - 1, limit, Sort.by(sortBy).descending());
+        PaginationInfo paginationInfo = new PaginationInfo(pageRequest, search);
+        ProductWithPageResponseDto responseDto = productService.findAllProducts(paginationInfo);
         model.addAttribute("products", responseDto);
 
         return "admin/product/list";

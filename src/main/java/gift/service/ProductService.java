@@ -1,14 +1,12 @@
 package gift.service;
 
+import gift.domain.PaginationInfo;
 import gift.dto.*;
 import gift.domain.Product;
 import gift.repository.ProductRepository;
-import org.springframework.http.HttpStatus;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
-
-import java.util.List;
 
 @Service
 public class ProductService {
@@ -18,36 +16,13 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
-    public ProductWithPageResponseDto findAllProducts(int page, int limit, String search) {
-        if (page < 0 || limit < 0) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "올바르지 않은 요청입니다.");
-        }
-
-        int offset = (page - 1) * limit;
-        List<Product> list;
-        long totalCount;
-
-        if (search == null || search.isBlank()) {
-            list = productRepository.findAllByPaging(limit, offset);
-            totalCount = productRepository.countAll();
-        } else {
-            String keyword = "%" + search + "%";
-            list = productRepository.findByKeyword(limit, offset, keyword);
-            totalCount = productRepository.countAllByKeyword(keyword);
-        }
-
-        List<ProductResponseDto> content = list.stream()
-                .map(ProductResponseDto::from)
-                .toList();
-
-        PaginationMetadataDto paginationMetadataDto = new PaginationMetadataDto(
-                page,
-                limit,
-                (int) Math.ceil((double) totalCount / limit),
-                totalCount
+    public ProductWithPageResponseDto findAllProducts(PaginationInfo paginationInfo) {
+        Page<Product> findProducts = productRepository.findProductByNameLike(
+                paginationInfo.getPageable(),
+                paginationInfo.getSearch()
         );
 
-        return new ProductWithPageResponseDto(content, paginationMetadataDto);
+        return ProductWithPageResponseDto.from(findProducts);
     }
 
     public ProductResponseDto findProductById(Long id) {
