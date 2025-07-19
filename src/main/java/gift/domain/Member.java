@@ -3,8 +3,6 @@ package gift.domain;
 import gift.enums.Role;
 import jakarta.persistence.*;
 
-import java.time.LocalDateTime;
-
 @Entity
 @Table(name = "member")
 public class Member extends BaseEntity {
@@ -31,21 +29,10 @@ public class Member extends BaseEntity {
     }
 
     public Member(String email, String password, Role role) {
-        this.email = email;
-        this.password = password;
-        this.role = role;
+        this(null, email, password, role);
     }
 
-    public Member() {
-
-    }
-
-    public Member(Long id, String email, String password, Role role, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        super(createdAt, updatedAt);
-        this.id = id;
-        this.email = email;
-        this.password = password;
-        this.role = role;
+    protected Member() {
     }
 
     public Long getId() {

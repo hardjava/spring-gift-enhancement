@@ -19,11 +19,6 @@ public class BaseEntity {
     @LastModifiedDate
     private LocalDateTime modifiedAt;
 
-    public BaseEntity(LocalDateTime createdAt, LocalDateTime modifiedAt) {
-        this.createdAt = createdAt;
-        this.modifiedAt = modifiedAt;
-    }
-
-    public BaseEntity() {
+    protected BaseEntity() {
     }
 }

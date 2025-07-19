@@ -21,20 +21,11 @@ public class Wish extends BaseEntity {
         return id;
     }
 
-    public Long getMemberId() {
-        return member.getId();
-    }
-
-    public Long getProductId() {
-        return product.getId();
-    }
-
-    public Wish() {
+    protected Wish() {
 
     }
 
     public Wish(Member member, Product product) {
-        super();
         this.member = member;
         this.product = product;
     }

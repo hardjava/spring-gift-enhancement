@@ -1,17 +1,14 @@
 package gift.service;
 
-import gift.domain.Member;
-import gift.domain.Product;
-import gift.domain.Wish;
-import gift.dto.WishSummaryResponseDto;
+import gift.domain.*;
+import gift.dto.WishSummaryWithPageResponseDto;
 import gift.repository.ProductRepository;
 import gift.repository.WishListRepository;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
-
-import java.util.List;
 
 @Service
 public class WishListService {
@@ -23,12 +20,14 @@ public class WishListService {
         this.productRepository = productRepository;
     }
 
-    public List<WishSummaryResponseDto> findAllWishSummaryByMemberId(Long memberId) {
+    public WishSummaryWithPageResponseDto findAllWishSummaryByMemberId(WishListPaginationInfo paginationInfo) {
+        Page<WishSummary> findWishSummary = wishListRepository.findWishSummaryByMemberId(
+                paginationInfo.getMemberId(),
+                paginationInfo.getSearch(),
+                paginationInfo.getPageable()
+        );
 
-        return wishListRepository.findAllWishSummaryByMemberId(memberId)
-                .stream()
-                .map(WishSummaryResponseDto::from)
-                .toList();
+        return WishSummaryWithPageResponseDto.from(findWishSummary);
     }
 
     @Transactional
@@ -47,4 +46,5 @@ public class WishListService {
 
         wishListRepository.deleteWishByMember_IdAndProduct_Id(memberId, productId);
     }
+
 }

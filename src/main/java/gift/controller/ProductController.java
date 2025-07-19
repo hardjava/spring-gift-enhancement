@@ -1,16 +1,19 @@
 package gift.controller;
 
 import gift.component.JwtUtil;
+import gift.domain.PaginationInfo;
 import gift.dto.CreateProductRequestDto;
 import gift.dto.ProductResponseDto;
+import gift.dto.ProductWithPageResponseDto;
 import gift.dto.UpdateProductRequestDto;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("api/products")
@@ -25,10 +28,17 @@ public class ProductController {
 
     // 상품 목록 조회
     @GetMapping
-    public ResponseEntity<List<ProductResponseDto>> findAllProducts() {
-        List<ProductResponseDto> list = productService.findAllProducts();
+    public ResponseEntity<ProductWithPageResponseDto> findAllProducts(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int limit,
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false, defaultValue = "name") String sortBy
+    ) {
+        Pageable pageRequest = PageRequest.of(page - 1, limit, Sort.by(sortBy).descending());
+        PaginationInfo paginationInfo = new PaginationInfo(pageRequest, search);
+        ProductWithPageResponseDto responseDto = productService.findAllProducts(paginationInfo);
 
-        return new ResponseEntity<>(list, HttpStatus.OK);
+        return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
     // 상품 단건 조회

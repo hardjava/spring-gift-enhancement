@@ -1,7 +1,5 @@
 package gift.domain;
 
-import gift.validation.ProductNameValidator;
-import gift.validation.ProductPriceValidator;
 import jakarta.persistence.*;
 
 @Entity
@@ -11,16 +9,16 @@ public class Product extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String name;
+    @Embedded
+    private ProductName name;
 
-    @Column(nullable = false)
-    private Long price;
+    @Embedded
+    private ProductPrice price;
 
     @Column(nullable = false)
     private String imageUrl;
 
-    public Product() {
+    protected Product() {
 
     }
 
@@ -29,42 +27,30 @@ public class Product extends BaseEntity {
     }
 
     public String getName() {
-        return name;
+        return name.getName();
     }
 
     public Long getPrice() {
-        return price;
+        return price.getPrice();
     }
 
     public String getImageUrl() {
         return imageUrl;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
     public Product(String name, Long price, String imageUrl) {
-        this.name = name;
-        this.price = price;
+        this.name = new ProductName(name);
+        this.price = new ProductPrice(price);
         this.imageUrl = imageUrl;
     }
 
     public static Product of(String name, Long price, String imageUrl) {
-        ProductNameValidator.validateName(name);
-        ProductPriceValidator.validatePrice(price);
         return new Product(name, price, imageUrl);
     }
 
     public void update(String name, Long price, String imageUrl) {
-        ProductNameValidator.validateName(name);
-        ProductPriceValidator.validatePrice(price);
-        this.name = name;
-        this.price = price;
+        this.name = new ProductName(name);
+        this.price = new ProductPrice(price);
         this.imageUrl = imageUrl;
     }
 }

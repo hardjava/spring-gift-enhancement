@@ -1,14 +1,12 @@
 package gift.service;
 
-import gift.dto.CreateProductRequestDto;
-import gift.dto.ProductResponseDto;
-import gift.dto.UpdateProductRequestDto;
+import gift.domain.PaginationInfo;
+import gift.dto.*;
 import gift.domain.Product;
 import gift.repository.ProductRepository;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 public class ProductService {
@@ -18,12 +16,13 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
-    public List<ProductResponseDto> findAllProducts() {
+    public ProductWithPageResponseDto findAllProducts(PaginationInfo paginationInfo) {
+        Page<Product> findProducts = productRepository.findProductByNameLike(
+                paginationInfo.getPageable(),
+                paginationInfo.getSearch()
+        );
 
-        return productRepository.findAll()
-                .stream()
-                .map(ProductResponseDto::from)
-                .toList();
+        return ProductWithPageResponseDto.from(findProducts);
     }
 
     public ProductResponseDto findProductById(Long id) {

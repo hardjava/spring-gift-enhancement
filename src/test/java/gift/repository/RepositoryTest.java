@@ -1,12 +1,16 @@
 package gift.repository;
 
-import gift.domain.Member;
-import gift.domain.Product;
-import gift.domain.Wish;
+import gift.domain.*;
 import gift.enums.Role;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+
+import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -57,9 +61,10 @@ public class RepositoryTest {
 
     @Test
     void 상품정보를_수정하면_정상적으로_반영된다() {
+        ProductName productName = new ProductName("[테스트] update");
         var product = productRepository.save(new Product("[테스트] 쌍쌍바", 123400L, "테스트url"));
         product.update("[테스트] update", 1200L, "수정 URL");
-        var product2 = productRepository.findByName("[테스트] update");
+        var product2 = productRepository.findByName(productName);
         assertThat(product2).isNotEmpty();
     }
 
@@ -86,4 +91,132 @@ public class RepositoryTest {
         // then
         assertThat(wishListRepository.findById(wish.getId())).isEmpty();
     }
+
+    @Test
+    void 검색어_없이_상품_페이징_정상조회() {
+        // given
+        Pageable pageRequest = PageRequest.of(0, 10, Sort.by("name").descending());
+        PaginationInfo paginationInfo = new PaginationInfo(
+                pageRequest,
+                null
+        );
+
+        List<Product> mockProducts = List.of(
+                new Product("상품1", 1000L, "img1"),
+                new Product("상품2", 2000L, "img2")
+        );
+        productRepository.saveAll(mockProducts);
+
+        // when
+        Page<Product> result = productRepository.findProductByNameLike(paginationInfo.getPageable(), paginationInfo.getSearch());
+
+        // then
+        assertThat(result.getContent().size()).isEqualTo(2);
+        assertThat(result.getTotalElements()).isEqualTo(2);
+        assertThat(result.getPageable().getPageNumber()).isEqualTo(0);
+        assertThat(result.getPageable().getPageSize()).isEqualTo(10);
+    }
+
+    @Test
+    void 검색어_있을때_상품_페이징_정상조회() {
+        // given
+        Pageable pageRequest = PageRequest.of(0, 10, Sort.by("name").descending());
+        PaginationInfo paginationInfo = new PaginationInfo(
+                pageRequest,
+                "상품"
+        );
+
+        List<Product> mockProducts = List.of(
+                new Product("상품검색1", 3000L, "img3"),
+                new Product("상품검색2", 4000L, "img4"),
+                new Product("테스트1", 4000L, "img4"),
+                new Product("테스트2", 4000L, "img4")
+        );
+        productRepository.saveAll(mockProducts);
+
+        // when
+        Page<Product> result = productRepository.findProductByNameLike(paginationInfo.getPageable(), paginationInfo.getSearch());
+
+        // then
+        assertThat(result.getContent().size()).isEqualTo(2);
+        assertThat(result.getTotalElements()).isEqualTo(2);
+        assertThat(result.getPageable().getPageNumber()).isEqualTo(0);
+        assertThat(result.getPageable().getPageSize()).isEqualTo(10);
+    }
+
+    @Test
+    void 검색어_없이_회원의_위시요약_페이징_정상조회() {
+        // given
+        var member = new Member("test@email.com", "1234", Role.ROLE_USER);
+        var m = memberRepository.save(member);
+
+        Pageable pageRequest = PageRequest.of(0, 10);
+        WishListPaginationInfo wishListPaginationInfo = new WishListPaginationInfo(
+                pageRequest,
+                null,
+                m
+        );
+
+        var p1 = productRepository.save(new Product("상품검색1", 3000L, "img3"));
+        var p2 = productRepository.save(new Product("상품검색2", 4000L, "img4"));
+
+        List<Wish> mockWished = List.of(
+                new Wish(m, p1),
+                new Wish(m, p1),
+                new Wish(m, p1),
+                new Wish(m, p2)
+        );
+        wishListRepository.saveAll(mockWished);
+
+        // when
+        Page<WishSummary> result = wishListRepository.findWishSummaryByMemberId(
+                m.getId(),
+                wishListPaginationInfo.getSearch(),
+                wishListPaginationInfo.getPageable()
+        );
+
+        // then
+        assertThat(result.getContent().size()).isEqualTo(2);
+        assertThat(result.getTotalElements()).isEqualTo(2);
+        assertThat(result.getPageable().getPageNumber()).isEqualTo(0);
+        assertThat(result.getPageable().getPageSize()).isEqualTo(10);
+    }
+    @Test
+    void 검색어_있을때_회원의_위시요약_페이징_정상조회() {
+        // given
+        var member = new Member("test@email.com", "1234", Role.ROLE_USER);
+        var m = memberRepository.save(member);
+
+        Pageable pageRequest = PageRequest.of(0, 10);
+        WishListPaginationInfo wishListPaginationInfo = new WishListPaginationInfo(
+                pageRequest,
+                "상품",
+                m
+        );
+
+        var p1 = productRepository.save(new Product("상품검색1", 3000L, "img3"));
+        var p2 = productRepository.save(new Product("테스트", 4000L, "img4"));
+
+        List<Wish> mockWished = List.of(
+                new Wish(m, p1),
+                new Wish(m, p1),
+                new Wish(m, p1),
+                new Wish(m, p2)
+        );
+        wishListRepository.saveAll(mockWished);
+
+        // when
+        Page<WishSummary> result = wishListRepository.findWishSummaryByMemberId(
+                m.getId(),
+                wishListPaginationInfo.getSearch(),
+                wishListPaginationInfo.getPageable()
+        );
+
+        // then
+        assertThat(result.getContent().size()).isEqualTo(1);
+        assertThat(result.getTotalElements()).isEqualTo(1);
+        assertThat(result.getPageable().getPageNumber()).isEqualTo(0);
+        assertThat(result.getPageable().getPageSize()).isEqualTo(10);
+    }
+
 }
