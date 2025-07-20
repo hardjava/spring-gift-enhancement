@@ -22,8 +22,8 @@ public class OptionQuantity {
     }
 
     private static void validateQuantity(int quantity) {
-        if (quantity < 0 || quantity > 100000000) {
-            throw new IllegalArgumentException("quantity는 0 이상, 1억 미만 이어야 합니다.");
+        if (quantity < 1 || quantity > 100000000) {
+            throw new IllegalArgumentException("옵션 수량은 최소 1개 이상 1억 개 미만입니다.");
         }
     }
 }

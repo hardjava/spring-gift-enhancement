@@ -27,6 +27,11 @@ public class Option extends BaseEntity {
 
     }
 
+    public Option(String name, int quantity) {
+        this.name = new OptionName(name);
+        this.quantity = new OptionQuantity(quantity);
+    }
+
     public Long getId() {
         return id;
     }
@@ -39,9 +44,22 @@ public class Option extends BaseEntity {
         return quantity.getQuantity();
     }
 
-    public Option(Product product, String name, int quantity) {
+    public void setProduct(Product product) {
         this.product = product;
-        this.name = new OptionName(name);
-        this.quantity = new OptionQuantity(quantity);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Option)) return false;
+
+        Option option = (Option) o;
+
+        return name != null && name.equals(option.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return name != null ? name.hashCode() : 0;
     }
 }

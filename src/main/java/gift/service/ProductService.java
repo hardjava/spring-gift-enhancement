@@ -33,10 +33,10 @@ public class ProductService {
 
     @Transactional
     public ProductResponseDto createProduct(CreateProductRequestDto requestDto) {
-        Product product = Product.of(requestDto.name(), requestDto.price(), requestDto.imageUrl());
-        Product createdProduct = productRepository.save(product);
+        Product newProduct = Product.from(requestDto);
+        Product savedProduct = productRepository.save(newProduct);
 
-        return ProductResponseDto.from(createdProduct);
+        return ProductResponseDto.from(savedProduct);
     }
 
     @Transactional

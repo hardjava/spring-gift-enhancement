@@ -72,6 +72,7 @@ public class ProductRequestValidator implements ConstraintValidator<ValidProduct
         for (int i = 0; i < options.size(); i++) {
             OptionRequestDto option = options.get(i);
             String optionName = option.name();
+            int optionQuantity = option.quantity();
 
             if (optionName == null || optionName.isBlank() || optionName.length() > 50 ||
                 !optionName.matches(VALID_NAME_PATTERN)) {
@@ -79,6 +80,7 @@ public class ProductRequestValidator implements ConstraintValidator<ValidProduct
                 context.buildConstraintViolationWithTemplate("옵션 이름이 유효하지 않습니다: " + optionName)
                         .addPropertyNode("options[" + i + "]")
                         .addConstraintViolation();
+
                 isValid = false;
             }
 
@@ -87,6 +89,16 @@ public class ProductRequestValidator implements ConstraintValidator<ValidProduct
                 context.buildConstraintViolationWithTemplate("옵션 이름이 중복됩니다: " + optionName)
                         .addPropertyNode("options[" + i + "]")
                         .addConstraintViolation();
+
+                isValid = false;
+            }
+
+            if (optionQuantity < 1 || optionQuantity > 100000000) {
+                context.disableDefaultConstraintViolation();
+                context.buildConstraintViolationWithTemplate("옵션 수량은 최소 1개 이상 1억 개 미만입니다.: " + optionQuantity)
+                        .addPropertyNode("options[" + i + "]")
+                        .addConstraintViolation();
+
                 isValid = false;
             }
         }
