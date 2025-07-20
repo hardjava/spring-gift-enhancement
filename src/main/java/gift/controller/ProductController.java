@@ -1,6 +1,8 @@
 package gift.controller;
 
+import gift.auth.LoginMember;
 import gift.component.JwtUtil;
+import gift.domain.Member;
 import gift.domain.PaginationInfo;
 import gift.dto.*;
 import gift.service.OptionService;
@@ -51,10 +53,7 @@ public class ProductController {
 
     // 상품 추가
     @PostMapping
-    public ResponseEntity<ProductResponseDto> createProduct(
-            @RequestHeader(value = "Authorization", required = false) String authHeader,
-            @Valid @RequestBody CreateProductRequestDto requestDto) {
-        jwtUtil.validateAuthorizationHeader(authHeader, "products-api");
+    public ResponseEntity<ProductResponseDto> createProduct(@LoginMember Member member, @Valid @RequestBody CreateProductRequestDto requestDto) {
         ProductResponseDto productResponseDto = productService.createProduct(requestDto);
 
         return new ResponseEntity<>(productResponseDto, HttpStatus.CREATED);

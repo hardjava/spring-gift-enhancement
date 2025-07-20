@@ -1,15 +1,17 @@
 package gift.dto;
 
-import gift.validation.ValidProductName;
-import gift.validation.ValidProductPrice;
+import gift.validation.ValidProductRequest;
 
+import java.util.List;
+
+@ValidProductRequest
 public record CreateProductRequestDto(
-        @ValidProductName
         String name,
 
-        @ValidProductPrice
         Long price,
 
-        String imageUrl
+        String imageUrl,
+
+        List<OptionRequestDto> options
 ) {
 }
