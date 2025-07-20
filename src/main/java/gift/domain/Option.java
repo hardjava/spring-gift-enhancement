@@ -32,6 +32,10 @@ public class Option extends BaseEntity {
         this.quantity = new OptionQuantity(quantity);
     }
 
+    public void substract(int amount) {
+        this.quantity = this.quantity.substract(amount);
+    }
+
     public Long getId() {
         return id;
     }
@@ -55,11 +59,11 @@ public class Option extends BaseEntity {
 
         Option option = (Option) o;
 
-        return name != null && name.equals(option.name);
+        return name.getName() != null && name.getName().equals(option.getName());
     }
 
     @Override
     public int hashCode() {
-        return name != null ? name.hashCode() : 0;
+        return name.getName() != null ? name.getName().hashCode() : 0;
     }
 }

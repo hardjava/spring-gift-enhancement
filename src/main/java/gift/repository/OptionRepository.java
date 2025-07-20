@@ -1,7 +1,6 @@
 package gift.repository;
 
 import gift.domain.Option;
-import gift.domain.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
@@ -20,5 +19,7 @@ public interface OptionRepository extends JpaRepository<Option, Long> {
         return options;
     }
 
-    void deleteByProduct(Product product);
+    default Option findByIdOrElseThrow(Long id) {
+        return findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 옵션을 찾을 수 없습니다."));
+    }
 }

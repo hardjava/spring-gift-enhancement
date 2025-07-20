@@ -5,6 +5,7 @@ import gift.domain.OptionResponse;
 import gift.dto.OptionResponseDto;
 import gift.repository.OptionRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -24,5 +25,11 @@ public class OptionService {
                         .map(OptionResponse::from)
                         .toList()
         );
+    }
+
+    @Transactional
+    public void substract(Long optionId, int quantity) {
+        Option findOption = optionRepository.findByIdOrElseThrow(optionId);
+        findOption.substract(quantity);
     }
 }

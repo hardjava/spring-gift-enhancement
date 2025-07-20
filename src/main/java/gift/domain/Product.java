@@ -24,7 +24,7 @@ public class Product extends BaseEntity {
     private String imageUrl;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Option> options;
+    private Set<Option> options = new HashSet<>();
 
     protected Product() {
 
@@ -46,16 +46,19 @@ public class Product extends BaseEntity {
         return imageUrl;
     }
 
-    public Product(String name, Long price, String imageUrl, List<Option> options) {
+    public Product(String name, Long price, String imageUrl) {
         this.name = new ProductName(name);
         this.price = new ProductPrice(price);
         this.imageUrl = imageUrl;
+    }
+
+    public Product(String name, Long price, String imageUrl, List<Option> options) {
+        this(name, price, imageUrl);
 
         if (options == null || options.isEmpty()) {
             throw new IllegalArgumentException("상품에는 항상 하나 이상의 옵션이 있어야 합니다.");
         }
 
-        this.options = new HashSet<>();
         for (Option option : options) {
             addOption(option);
         }
