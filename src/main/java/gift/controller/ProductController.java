@@ -2,10 +2,8 @@ package gift.controller;
 
 import gift.component.JwtUtil;
 import gift.domain.PaginationInfo;
-import gift.dto.CreateProductRequestDto;
-import gift.dto.ProductResponseDto;
-import gift.dto.ProductWithPageResponseDto;
-import gift.dto.UpdateProductRequestDto;
+import gift.dto.*;
+import gift.service.OptionService;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.PageRequest;
@@ -19,10 +17,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("api/products")
 public class ProductController {
     private final ProductService productService;
+    private final OptionService optionService;
     private final JwtUtil jwtUtil;
 
-    public ProductController(ProductService productService, JwtUtil jwtUtil) {
+    public ProductController(ProductService productService, OptionService optionService, JwtUtil jwtUtil) {
         this.productService = productService;
+        this.optionService = optionService;
         this.jwtUtil = jwtUtil;
     }
 
@@ -82,5 +82,12 @@ public class ProductController {
         productService.updateProduct(requestDto);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/{productID}/options")
+    public ResponseEntity<OptionResponseDto> findAllOptions(@PathVariable Long productID) {
+        OptionResponseDto responseDto = optionService.getAllOptions(productID);
+
+        return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 }

@@ -8,6 +8,10 @@ public class OptionQuantity {
     @Column(name = "quantity")
     private int quantity;
 
+    public int getQuantity() {
+        return quantity;
+    }
+
     protected OptionQuantity() {
 
     }

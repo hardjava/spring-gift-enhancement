@@ -18,6 +18,10 @@ public class OptionName {
         this.name = name;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public static void validateName(String name) {
         if (name == null || name.isBlank()) {
             throw new IllegalArgumentException("옵션 이름은 비어 있을 수 없습니다.");
