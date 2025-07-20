@@ -46,6 +46,10 @@ public class Product extends BaseEntity {
         return imageUrl;
     }
 
+    public Set<Option> getOptions() {
+        return options;
+    }
+
     public Product(String name, Long price, String imageUrl) {
         this.name = new ProductName(name);
         this.price = new ProductPrice(price);
