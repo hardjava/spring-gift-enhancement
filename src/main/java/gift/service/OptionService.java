@@ -28,8 +28,8 @@ public class OptionService {
     }
 
     @Transactional
-    public void substract(Long optionId, int quantity) {
+    public void subtract(Long optionId, int quantity) {
         Option findOption = optionRepository.findByIdOrElseThrow(optionId);
-        findOption.substract(quantity);
+        findOption.subtract(quantity);
     }
 }

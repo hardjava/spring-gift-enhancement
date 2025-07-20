@@ -44,7 +44,7 @@ public class OptionTest {
     @Test
     void 재고가_부족할_경우_예외를_던진다() {
         Option option = new Option("test", 10);
-        assertThatThrownBy(() -> option.substract(15))
+        assertThatThrownBy(() -> option.subtract(15))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("재고");
     }

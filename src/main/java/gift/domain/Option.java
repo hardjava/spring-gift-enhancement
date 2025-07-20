@@ -32,8 +32,8 @@ public class Option extends BaseEntity {
         this.quantity = new OptionQuantity(quantity);
     }
 
-    public void substract(int amount) {
-        this.quantity = this.quantity.substract(amount);
+    public void subtract(int amount) {
+        this.quantity = this.quantity.subtract(amount);
     }
 
     public Long getId() {

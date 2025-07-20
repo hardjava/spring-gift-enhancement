@@ -27,7 +27,7 @@ public class OptionQuantity {
         }
     }
 
-    public OptionQuantity substract(int amount) {
+    public OptionQuantity subtract(int amount) {
         if (amount < 1) {
             throw new IllegalArgumentException("감소시킬 수량은 1 이상이어야 합니다.");
         }
