@@ -1,11 +1,11 @@
 package gift.controller;
 
+import gift.auth.LoginMember;
 import gift.component.JwtUtil;
+import gift.domain.Member;
 import gift.domain.PaginationInfo;
-import gift.dto.CreateProductRequestDto;
-import gift.dto.ProductResponseDto;
-import gift.dto.ProductWithPageResponseDto;
-import gift.dto.UpdateProductRequestDto;
+import gift.dto.*;
+import gift.service.OptionService;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.PageRequest;
@@ -19,10 +19,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("api/products")
 public class ProductController {
     private final ProductService productService;
+    private final OptionService optionService;
     private final JwtUtil jwtUtil;
 
-    public ProductController(ProductService productService, JwtUtil jwtUtil) {
+    public ProductController(ProductService productService, OptionService optionService, JwtUtil jwtUtil) {
         this.productService = productService;
+        this.optionService = optionService;
         this.jwtUtil = jwtUtil;
     }
 
@@ -51,10 +53,7 @@ public class ProductController {
 
     // 상품 추가
     @PostMapping
-    public ResponseEntity<ProductResponseDto> createProduct(
-            @RequestHeader(value = "Authorization", required = false) String authHeader,
-            @Valid @RequestBody CreateProductRequestDto requestDto) {
-        jwtUtil.validateAuthorizationHeader(authHeader, "products-api");
+    public ResponseEntity<ProductResponseDto> createProduct(@LoginMember Member member, @Valid @RequestBody CreateProductRequestDto requestDto) {
         ProductResponseDto productResponseDto = productService.createProduct(requestDto);
 
         return new ResponseEntity<>(productResponseDto, HttpStatus.CREATED);
@@ -82,5 +81,12 @@ public class ProductController {
         productService.updateProduct(requestDto);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/{productID}/options")
+    public ResponseEntity<OptionResponseDto> findAllOptions(@PathVariable Long productID) {
+        OptionResponseDto responseDto = optionService.getAllOptions(productID);
+
+        return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 }

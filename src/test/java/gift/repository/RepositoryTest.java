@@ -100,7 +100,6 @@ public class RepositoryTest {
                 pageRequest,
                 null
         );
-
         List<Product> mockProducts = List.of(
                 new Product("상품1", 1000L, "img1"),
                 new Product("상품2", 2000L, "img2")
@@ -181,6 +180,7 @@ public class RepositoryTest {
         assertThat(result.getPageable().getPageNumber()).isEqualTo(0);
         assertThat(result.getPageable().getPageSize()).isEqualTo(10);
     }
+
     @Test
     void 검색어_있을때_회원의_위시요약_페이징_정상조회() {
         // given
